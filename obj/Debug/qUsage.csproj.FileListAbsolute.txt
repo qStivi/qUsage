@@ -1,0 +1,10 @@
+C:\Projects\qUsage\qUsage\bin\Debug\qUsage.exe.config
+C:\Projects\qUsage\qUsage\bin\Debug\qUsage.exe
+C:\Projects\qUsage\qUsage\bin\Debug\qUsage.pdb
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.csprojAssemblyReference.cache
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.Properties.Resources.resources
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.csproj.GenerateResource.cache
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.csproj.CoreCompileInputs.cache
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.exe
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.pdb
+C:\Projects\qUsage\qUsage\obj\Debug\qUsage.Form1.resources
