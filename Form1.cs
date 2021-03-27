@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using CircularProgressBar;
 
 namespace qUsage
 {
@@ -84,6 +85,11 @@ namespace qUsage
         private void button4_Leave(object sender, EventArgs e)
         {
             button4.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
