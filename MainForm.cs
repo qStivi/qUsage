@@ -70,7 +70,7 @@ namespace qUsage
 
         private void Exit(object sender, EventArgs e)
         {
-            Application.Exit();
+            Program.Close();
         }
 
         private void OpenFromTray(object sender, MouseEventArgs e)
