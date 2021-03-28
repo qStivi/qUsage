@@ -12,7 +12,6 @@ C:\Projects\qUsage\bin\Debug\qUsage.exe.config
 C:\Projects\qUsage\bin\Debug\qUsage.exe
 C:\Projects\qUsage\bin\Debug\qUsage.pdb
 C:\Projects\qUsage\obj\Debug\qUsage.csprojAssemblyReference.cache
-C:\Projects\qUsage\obj\Debug\qUsage.Form1.resources
 C:\Projects\qUsage\obj\Debug\qUsage.Properties.Resources.resources
 C:\Projects\qUsage\obj\Debug\qUsage.csproj.GenerateResource.cache
 C:\Projects\qUsage\obj\Debug\qUsage.csproj.CoreCompileInputs.cache
@@ -22,3 +21,6 @@ C:\Projects\qUsage\bin\Debug\CircularProgressBar.dll
 C:\Projects\qUsage\bin\Debug\WinFormAnimation.dll
 C:\Projects\qUsage\bin\Debug\CircularProgressBar.xml
 C:\Projects\qUsage\obj\Debug\qUsage.csproj.CopyComplete
+C:\Projects\qUsage\obj\Debug\qUsage.Home.resources
+C:\Projects\qUsage\obj\Debug\qUsage.Settings.resources
+C:\Projects\qUsage\obj\Debug\qUsage.MainForm.resources
