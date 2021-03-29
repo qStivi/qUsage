@@ -38,7 +38,7 @@ namespace qUsage
             this.btnMenu4 = new System.Windows.Forms.Button();
             this.btnMenuSettings = new System.Windows.Forms.Button();
             this.btnMenu3 = new System.Windows.Forms.Button();
-            this.btnMenu2 = new System.Windows.Forms.Button();
+            this.btnMenuTasks = new System.Windows.Forms.Button();
             this.btnMenu1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -64,7 +64,7 @@ namespace qUsage
             this.panel1.Controls.Add(this.btnMenu4);
             this.panel1.Controls.Add(this.btnMenuSettings);
             this.panel1.Controls.Add(this.btnMenu3);
-            this.panel1.Controls.Add(this.btnMenu2);
+            this.panel1.Controls.Add(this.btnMenuTasks);
             this.panel1.Controls.Add(this.btnMenu1);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -134,23 +134,23 @@ namespace qUsage
             this.btnMenu3.Leave += new System.EventHandler(this.ResetBackColor);
             this.btnMenu3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMenu3_MouseUp);
             // 
-            // btnMenu2
+            // btnMenuTasks
             // 
-            this.btnMenu2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMenu2.FlatAppearance.BorderSize = 0;
-            this.btnMenu2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenu2.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.btnMenu2.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (126)))), ((int) (((byte) (249)))));
-            this.btnMenu2.Image = ((System.Drawing.Image) (resources.GetObject("btnMenu2.Image")));
-            this.btnMenu2.Location = new System.Drawing.Point(0, 210);
-            this.btnMenu2.Name = "btnMenu2";
-            this.btnMenu2.Size = new System.Drawing.Size(186, 42);
-            this.btnMenu2.TabIndex = 2;
-            this.btnMenu2.Text = "Dashboard";
-            this.btnMenu2.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnMenu2.UseVisualStyleBackColor = true;
-            this.btnMenu2.Leave += new System.EventHandler(this.ResetBackColor);
-            this.btnMenu2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMenu2_MouseUp);
+            this.btnMenuTasks.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMenuTasks.FlatAppearance.BorderSize = 0;
+            this.btnMenuTasks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuTasks.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.btnMenuTasks.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (126)))), ((int) (((byte) (249)))));
+            this.btnMenuTasks.Image = ((System.Drawing.Image) (resources.GetObject("btnMenuTasks.Image")));
+            this.btnMenuTasks.Location = new System.Drawing.Point(0, 210);
+            this.btnMenuTasks.Name = "btnMenuTasks";
+            this.btnMenuTasks.Size = new System.Drawing.Size(186, 42);
+            this.btnMenuTasks.TabIndex = 2;
+            this.btnMenuTasks.Text = "Tasks";
+            this.btnMenuTasks.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnMenuTasks.UseVisualStyleBackColor = true;
+            this.btnMenuTasks.Leave += new System.EventHandler(this.ResetBackColor);
+            this.btnMenuTasks.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMenuTasks_MouseUp);
             // 
             // btnMenu1
             // 
@@ -301,6 +301,7 @@ namespace qUsage
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseDown);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -325,7 +326,7 @@ namespace qUsage
 
         private System.Windows.Forms.Panel pnlNav;
 
-        private System.Windows.Forms.Button btnMenu2;
+        private System.Windows.Forms.Button btnMenuTasks;
         private System.Windows.Forms.Button btnMenu3;
         private System.Windows.Forms.Button btnMenu4;
         private System.Windows.Forms.Button btnMenuSettings;

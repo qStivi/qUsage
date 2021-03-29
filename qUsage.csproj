@@ -37,9 +37,13 @@
           <HintPath>packages\CircularProgressBar.2.8.0.16\lib\net40\CircularProgressBar.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="Microsoft.ApplicationId.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+          <HintPath>..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.ApplicationId.Framework\v4.0_10.0.0.0__31bf3856ad364e35\Microsoft.ApplicationId.Framework.dll</HintPath>
+        </Reference>
         <Reference Include="Microsoft.Tpm, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
           <HintPath>..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.Tpm\v4.0_10.0.0.0__31bf3856ad364e35\Microsoft.Tpm.dll</HintPath>
         </Reference>
+        <Reference Include="Microsoft.VisualBasic.Compatibility" />
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Web" />
@@ -72,6 +76,12 @@
         </Compile>
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="TaskManager.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="TaskManager.Designer.cs">
+          <DependentUpon>TaskManager.cs</DependentUpon>
+        </Compile>
         <Compile Include="Settings.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -93,6 +103,9 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <EmbeddedResource Include="TaskManager.resx">
+          <DependentUpon>TaskManager.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="Settings.resx">
           <DependentUpon>Settings.cs</DependentUpon>
         </EmbeddedResource>
