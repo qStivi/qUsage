@@ -1,0 +1,16 @@
+C:\Projects\qUsage\bin\x64\x64\qUsage.exe.config
+C:\Projects\qUsage\bin\x64\x64\qUsage.exe
+C:\Projects\qUsage\bin\x64\x64\CircularProgressBar.dll
+C:\Projects\qUsage\bin\x64\x64\WinFormAnimation.dll
+C:\Projects\qUsage\bin\x64\x64\CircularProgressBar.xml
+C:\Projects\qUsage\obj\x64\x64\qUsage.csprojAssemblyReference.cache
+C:\Projects\qUsage\obj\x64\x64\qUsage.MainForm.resources
+C:\Projects\qUsage\obj\x64\x64\qUsage.Home.resources
+C:\Projects\qUsage\obj\x64\x64\qUsage.Properties.Resources.resources
+C:\Projects\qUsage\obj\x64\x64\qUsage.TaskManager.resources
+C:\Projects\qUsage\obj\x64\x64\qUsage.Settings.resources
+C:\Projects\qUsage\obj\x64\x64\qUsage.csproj.GenerateResource.cache
+C:\Projects\qUsage\obj\x64\x64\qUsage.csproj.CoreCompileInputs.cache
+C:\Projects\qUsage\obj\x64\x64\qUsage.csproj.CopyComplete
+C:\Projects\qUsage\obj\x64\x64\qUsage.exe
+C:\Projects\qUsage\bin\x64\x64\Microsoft.Tpm.dll
