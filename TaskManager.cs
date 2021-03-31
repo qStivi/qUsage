@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -13,10 +13,12 @@ namespace qUsage
         private const int ColCount = 3;
         private static int _rowCount;
 
+        private readonly List<Process> _processes = new();
+
         private readonly BackgroundWorker _worker;
         private TableLayoutPanel _tblProcesses;
 
-        private List<Process> AllProcesses;
+        private BackgroundWorker bgw;
 
         public TaskManager()
         {
@@ -43,67 +45,77 @@ namespace qUsage
 
         private void GenerateTable(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            var numberOfApps = GetNumberOfAppsWeActuallyCareAbout();
-            _rowCount = numberOfApps;
-            var bgWorker = (BackgroundWorker) sender;
-            InitializeTable(ColCount, _rowCount);
-            PopulateTable(bgWorker);
+            bgw = (BackgroundWorker) sender;
+
+            _rowCount = GetNumberOfAppsWeActuallyCareAbout(bgw);
+            InitializeTable();
+            PopulateTable();
         }
 
-        private void InitializeTable(int rows, int cols)
+        private void InitializeTable()
         {
+            const float width = (float) 100 / ColCount;
             _tblProcesses = new TableLayoutPanel
             {
-                // Location = new Point(40, 38),
-                // Size = new Size(100, 23),
+                ColumnCount = ColCount,
                 AutoScroll = true,
-                ColumnCount = cols,
-                RowCount = rows,
-                Name = "tblProcesses",
                 Dock = DockStyle.Fill,
-                TabIndex = 1
+                Location = new Point(0, 0),
+                Name = "tblProcesses",
+                RowCount = _rowCount,
+                Size = new Size(814, 530),
+                TabIndex = 99
             };
-            // for (var i = 0; i < cols; i++) _tblProcesses.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            for (var i = 0; i < ColCount; i++) _tblProcesses.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, width));
 
-            // for (var i = 0; i < rows; i++) _tblProcesses.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            for (var i = 0; i < _rowCount; i++) _tblProcesses.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         }
 
-        private void PopulateTable(BackgroundWorker backgroundWorker)
+        private void PopulateTable()
         {
-            var labels = new Label[_rowCount];
+            var lblNameArray = new Label[_rowCount];
+            var lblCompanyArray = new Label[_rowCount];
             for (var i = 0; i < _rowCount; i++)
             {
-                labels[i] = new Label
+                lblNameArray[i] = new Label
                 {
-                    // Location = new Point(40, 38),
-                    // Size = new Size(100, 23),
+                    Size = new Size(500, 42),
                     Dock = DockStyle.Fill,
-                    Name = "label1",
+                    Name = "processName" + i,
                     TabIndex = 0,
-                    Text = "Name"
+                    Text = _processes[i].MainModule?.FileVersionInfo.ProductName
                 };
-                _tblProcesses.Controls.Add(labels[i], 0, i);
-                // ReSharper disable once PossibleLossOfFraction
-                var progress = (int) ((double) i / _rowCount * 100);
-                backgroundWorker.ReportProgress(progress);
+                _tblProcesses.Controls.Add(lblNameArray[i], 0, i);
+                
+                lblCompanyArray[i] = new Label
+                {
+                    Size = new Size(500, 42),
+                    Dock = DockStyle.Fill,
+                    Name = "processCompany" + i,
+                    TabIndex = 0,
+                    Text = _processes[i].MainModule?.FileVersionInfo.CompanyName
+                };
+                _tblProcesses.Controls.Add(lblCompanyArray[i], 1, i);
             }
         }
 
-        private int GetNumberOfAppsWeActuallyCareAbout()
+        private int GetNumberOfAppsWeActuallyCareAbout(BackgroundWorker backgroundWorker)
         {
-            AllProcesses = Process.GetProcesses().ToList();
-            var processesWeHaveAccessTo = new List<Process>();
-            foreach (var process in AllProcesses)
+            var allProcesses = Process.GetProcesses().ToList();
+            for (var i = 0; i < allProcesses.Count; i++)
             {
+                var process = allProcesses[i];
                 try
                 {
                     if (process.MainModule == null) continue;
                     var companyName = process.MainModule.FileVersionInfo.CompanyName;
-                    
-                    if (companyName.Equals("Microsoft Corporation") || companyName == "") continue;
-                    processesWeHaveAccessTo.Add(process);
-                    Debug.WriteLine(process.MainModule.FileVersionInfo.CompanyName);
 
+                    if (companyName.Equals("Microsoft Corporation") || companyName == "") continue;
+                    _processes.Add(process);
+
+
+                    var progress = (int) ((double) i / allProcesses.Count * 100);
+                    backgroundWorker.ReportProgress(progress);
                 }
                 catch (Exception)
                 {
@@ -111,16 +123,20 @@ namespace qUsage
                 }
             }
 
-            return processesWeHaveAccessTo.Count;
+            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.CompanyName);
+            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.ProductName);
+            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.FileDescription);
+            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.FileName);
+            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.OriginalFilename);
+            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.InternalName);
+            return _processes.Count;
         }
 
         private void ShowTable(object sender, RunWorkerCompletedEventArgs e)
         {
             Controls.Add(_tblProcesses);
             progressBar1.Hide();
-            progressBar1.Dispose();
             circularProgressBar.Hide();
-            circularProgressBar.Dispose();
         }
     }
 }
