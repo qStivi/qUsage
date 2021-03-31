@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,12 +11,12 @@ namespace qUsage
     public partial class TaskManager : Form
     {
         private const int ColCount = 3;
-        private const int RowCount = 500;
+        private static int _rowCount;
 
         private readonly BackgroundWorker _worker;
         private TableLayoutPanel _tblProcesses;
 
-        private List<Process> processes;
+        private List<Process> AllProcesses;
 
         public TaskManager()
         {
@@ -42,8 +43,10 @@ namespace qUsage
 
         private void GenerateTable(object sender, DoWorkEventArgs doWorkEventArgs)
         {
+            var numberOfApps = GetNumberOfAppsWeActuallyCareAbout();
+            _rowCount = numberOfApps;
             var bgWorker = (BackgroundWorker) sender;
-            InitializeTable(ColCount, RowCount);
+            InitializeTable(ColCount, _rowCount);
             PopulateTable(bgWorker);
         }
 
@@ -67,9 +70,8 @@ namespace qUsage
 
         private void PopulateTable(BackgroundWorker backgroundWorker)
         {
-            var numberOfApps = GetNumberOfAppsWeActuallyCareAbout(backgroundWorker);
-            var labels = new Label[RowCount];
-            for (var i = 0; i < RowCount; i++)
+            var labels = new Label[_rowCount];
+            for (var i = 0; i < _rowCount; i++)
             {
                 labels[i] = new Label
                 {
@@ -82,46 +84,34 @@ namespace qUsage
                 };
                 _tblProcesses.Controls.Add(labels[i], 0, i);
                 // ReSharper disable once PossibleLossOfFraction
-                var progress = (int) ((double) i / RowCount * 100);
+                var progress = (int) ((double) i / _rowCount * 100);
                 backgroundWorker.ReportProgress(progress);
             }
         }
 
-        private int GetNumberOfAppsWeActuallyCareAbout(BackgroundWorker backgroundWorker)
+        private int GetNumberOfAppsWeActuallyCareAbout()
         {
-            processes = Process.GetProcesses().ToList();
-            foreach (var process in processes)
+            AllProcesses = Process.GetProcesses().ToList();
+            var processesWeHaveAccessTo = new List<Process>();
+            foreach (var process in AllProcesses)
             {
                 try
                 {
-                    if (process.ProcessName == "svchost")
-                    {
-                        processes.Remove(process);
-                    }
+                    if (process.MainModule == null) continue;
+                    var companyName = process.MainModule.FileVersionInfo.CompanyName;
+                    
+                    if (companyName.Equals("Microsoft Corporation") || companyName == "") continue;
+                    processesWeHaveAccessTo.Add(process);
+                    Debug.WriteLine(process.MainModule.FileVersionInfo.CompanyName);
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.Print(e.GetBaseException().ToString());
-                    //processes.Remove(process);
-                    throw;
+                    //ignored
                 }
             }
 
-            try
-            {
-                foreach (var process in processes)
-                {
-                    Debug.Print(process.ProcessName);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Print(e.InnerException.ToString());
-                throw;
-            }
-            
-            return processes.Count;
+            return processesWeHaveAccessTo.Count;
         }
 
         private void ShowTable(object sender, RunWorkerCompletedEventArgs e)
