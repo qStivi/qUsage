@@ -14,11 +14,19 @@ namespace qUsage
         [STAThread]
         private static void Main()
         {
-            _applicationStartTime = DateTime.UtcNow;
-            var list = Process.GetProcessesByName("opera");
-            var test = list[1].MainModule.FileVersionInfo.InternalName;
-            
-            
+            try
+            {
+                _applicationStartTime = DateTime.UtcNow;
+                var list = Process.GetProcessesByName("opera");
+                var test = list[1].MainModule.FileVersionInfo.InternalName;
+
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

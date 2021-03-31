@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace qUsage
@@ -11,6 +14,8 @@ namespace qUsage
 
         private readonly BackgroundWorker _worker;
         private TableLayoutPanel _tblProcesses;
+
+        private List<Process> processes;
 
         public TaskManager()
         {
@@ -28,13 +33,6 @@ namespace qUsage
             circularProgressBar.Value = e.ProgressPercentage;
             circularProgressBar.Text = e.ProgressPercentage.ToString();
             progressBar1.Value = e.ProgressPercentage;
-        }
-
-        private void UpdateProgress(int progress)
-        {
-            circularProgressBar.Value = progress;
-            circularProgressBar.Text = progress.ToString();
-            progressBar1.Value = progress;
         }
 
         private void TaskManager_Load(object sender, EventArgs e)
@@ -69,6 +67,7 @@ namespace qUsage
 
         private void PopulateTable(BackgroundWorker backgroundWorker)
         {
+            var numberOfApps = GetNumberOfAppsWeActuallyCareAbout(backgroundWorker);
             var labels = new Label[RowCount];
             for (var i = 0; i < RowCount; i++)
             {
@@ -85,8 +84,44 @@ namespace qUsage
                 // ReSharper disable once PossibleLossOfFraction
                 var progress = (int) ((double) i / RowCount * 100);
                 backgroundWorker.ReportProgress(progress);
-                // UpdateProgress(progress);
             }
+        }
+
+        private int GetNumberOfAppsWeActuallyCareAbout(BackgroundWorker backgroundWorker)
+        {
+            processes = Process.GetProcesses().ToList();
+            foreach (var process in processes)
+            {
+                try
+                {
+                    if (process.ProcessName == "svchost")
+                    {
+                        processes.Remove(process);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Debug.Print(e.GetBaseException().ToString());
+                    //processes.Remove(process);
+                    throw;
+                }
+            }
+
+            try
+            {
+                foreach (var process in processes)
+                {
+                    Debug.Print(process.ProcessName);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Print(e.InnerException.ToString());
+                throw;
+            }
+            
+            return processes.Count;
         }
 
         private void ShowTable(object sender, RunWorkerCompletedEventArgs e)
