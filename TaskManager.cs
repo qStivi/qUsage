@@ -6,6 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+
+
+// Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.CompanyName);
+// Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.ProductName);
+// Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.FileDescription);
+// Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.FileName);
+// Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.OriginalFilename);
+// Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.InternalName);
+
+
 namespace qUsage
 {
     public partial class TaskManager : Form
@@ -13,12 +23,12 @@ namespace qUsage
         private const int ColCount = 3;
         private static int _rowCount;
 
-        private readonly List<Process> _processes = new();
+        private List<Process> _processes = new();
 
         private readonly BackgroundWorker _worker;
         private TableLayoutPanel _tblProcesses;
 
-        private BackgroundWorker bgw;
+        private BackgroundWorker _bgw;
 
         public TaskManager()
         {
@@ -29,6 +39,15 @@ namespace qUsage
             _worker.DoWork += GenerateTable;
             _worker.ProgressChanged += worker_ProgressChanged;
             _worker.RunWorkerCompleted += ShowTable;
+        }
+
+        private void RefreshList(object sender, EventArgs eventArgs)
+        {
+            var newProcessList = GetProcesses(false, _bgw);
+            if (!_processes.All(newProcessList.Contains))
+            {
+                Debug.WriteLine("yee");
+            }
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -45,9 +64,10 @@ namespace qUsage
 
         private void GenerateTable(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            bgw = (BackgroundWorker) sender;
+            _bgw = (BackgroundWorker) sender;
 
-            _rowCount = GetNumberOfAppsWeActuallyCareAbout(bgw);
+            _processes = GetProcesses(true, _bgw);
+            _rowCount = _processes.Count;
             InitializeTable();
             PopulateTable();
         }
@@ -66,6 +86,7 @@ namespace qUsage
                 Size = new Size(814, 530),
                 TabIndex = 99
             };
+            _tblProcesses.MouseMove += RefreshList;
             for (var i = 0; i < ColCount; i++) _tblProcesses.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, width));
 
             for (var i = 0; i < _rowCount; i++) _tblProcesses.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -99,9 +120,10 @@ namespace qUsage
             }
         }
 
-        private int GetNumberOfAppsWeActuallyCareAbout(BackgroundWorker backgroundWorker)
+        private static List<Process> GetProcesses(bool updateProgress, BackgroundWorker bgw)
         {
             var allProcesses = Process.GetProcesses().ToList();
+            var newProcessList = new List<Process>();
             for (var i = 0; i < allProcesses.Count; i++)
             {
                 var process = allProcesses[i];
@@ -111,27 +133,19 @@ namespace qUsage
                     var companyName = process.MainModule.FileVersionInfo.CompanyName;
 
                     if (companyName.Equals("Microsoft Corporation") || companyName == "") continue;
-                    _processes.Add(process);
+                    newProcessList.Add(process);
 
-
+                    if (!updateProgress) continue;
                     var progress = (int) ((double) i / allProcesses.Count * 100);
-                    backgroundWorker.ReportProgress(progress);
+                    bgw.ReportProgress(progress);
                 }
-                catch (Exception)
-                {
-                    //ignored
-                }
+                catch (Exception e) {Nothing(e);}
             }
 
-            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.CompanyName);
-            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.ProductName);
-            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.FileDescription);
-            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.FileName);
-            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.OriginalFilename);
-            // Debug.WriteLine(_processes[0].MainModule?.FileVersionInfo.InternalName);
-            return _processes.Count;
+            return newProcessList;
         }
 
+        private static void Nothing(object o){}
         private void ShowTable(object sender, RunWorkerCompletedEventArgs e)
         {
             Controls.Add(_tblProcesses);
